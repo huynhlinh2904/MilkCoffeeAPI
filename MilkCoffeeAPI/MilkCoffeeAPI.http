@@ -1,0 +1,6 @@
+@MilkCoffeeAPI_HostAddress = http://localhost:5051
+
+GET {{MilkCoffeeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
