@@ -1,4 +1,4 @@
-﻿namespace MilkCoffeeAPI.Response
+﻿namespace MilkCoffeeAPI.Models.Response
 {
     public class ProductResponse
     {
@@ -6,7 +6,8 @@
         public string? ProductName { get; set; }
         public string? ProductDescription { get; set; }
 
-        public Guid? CategoryId { get; set; } = default(Guid?);
+        public Guid? Image { get; set; }
+        public Guid? CategoryId { get; set; } = default;
         public string? CategoryName { get; set; }
     }
 }

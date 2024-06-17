@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MilkCoffeeAPI.Entities;
+using MilkCoffeeAPI.Helpers;
+using MilkCoffeeAPI.Services.CategoriesService;
+using MilkCoffeeAPI.Services.ProductsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(c =>
 {
-
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MilkCoffee", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MILK COFFEE", Version = "v1" });
 });
+
+//connect db
 builder.Services.AddDbContext<MilkCoffeeContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
+//declare service
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IProductsService, ProductService>();
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
 var app = builder.Build();
 
 
@@ -25,19 +33,13 @@ builder.Services.AddEndpointsApiExplorer();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    app.UseSwaggerUI(c =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MILK COFFEE API V1");
     });
 }
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "MilkCoffee v1");
-    options.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
-    options.DocumentTitle = "My Swagger";
-});
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

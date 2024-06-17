@@ -1,26 +1,26 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MilkCoffeeAPI.Models.Resquest;
-using MilkCoffeeAPI.Services.ProductsService;
+using MilkCoffeeAPI.Services.CategoriesService;
 
 namespace MilkCoffeeAPI.Controllers
 {
-    [Route("api/product")]
+    [Route("api/v1/categories")]
     [ApiController]
-    public class ProductController : BaseAPIController
+    public class CategoriesController : BaseAPIController
     {
-        private readonly IProductsService _productService;
+        private readonly ICategoriesService _categoryService;
 
-        public ProductController(IProductsService productsService)
+        public CategoriesController(ICategoriesService categoryService)
         {
-            _productService = productsService;
+            this._categoryService = categoryService;
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductRequest request)
+        public async Task<IActionResult> CreateCategory(CategoryRequest request)
         {
             try
             {
-                var result = await _productService.CreateProduct(request);
+                var result = await _categoryService.CreateCategory(request);
                 if (result.Success == false)
                 {
                     return BadRequest();
@@ -33,28 +33,11 @@ namespace MilkCoffeeAPI.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetProductbyCategoryId(Guid? categoryId)
+        public async Task<IActionResult> GetCategory()
         {
             try
             {
-                var result = await _productService.GetProductByCategoryId(categoryId);
-                if (result.Success == false)
-                {
-                    return BadRequest();
-                }
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-        [HttpPut]
-        public async Task<IActionResult> UpdateProduct(Guid? productId, ProductRequest request)
-        {
-            try
-            {
-                var result = await _productService.UpdateProduct(productId, request);
+                var result = await _categoryService.GetCategoriesAsync();
                 if (result.Success == false)
                 {
                     return BadRequest();
@@ -67,5 +50,22 @@ namespace MilkCoffeeAPI.Controllers
             }
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory(Guid? id, CategoryRequest request)
+        {
+            try
+            {
+                var result = await _categoryService.UpdateCategory(id, request);
+                if (result.Success == false)
+                {
+                    return BadRequest();
+                }
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
